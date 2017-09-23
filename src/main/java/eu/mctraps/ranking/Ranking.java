@@ -1,5 +1,7 @@
 package eu.mctraps.ranking;
 
+import eu.mctraps.ranking.commands.RankingCommand;
+import eu.mctraps.ranking.listeners.PlayerDeathListener;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +21,9 @@ public final class Ranking extends JavaPlugin {
     public Statement statement;
     private String host, database, username, password;
     private int port;
+
+    RankingCommand rankingCommand;
+    PlayerDeathListener playerDeathListener;
 
     @Override
     public void onEnable() {
@@ -47,6 +52,10 @@ public final class Ranking extends JavaPlugin {
             }
         };
         r.runTaskAsynchronously(this);
+
+        rankingCommand = new RankingCommand(this);
+
+        playerDeathListener = new PlayerDeathListener(this);
     }
 
     @Override

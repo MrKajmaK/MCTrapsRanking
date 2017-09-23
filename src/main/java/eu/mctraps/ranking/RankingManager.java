@@ -1,6 +1,5 @@
 package eu.mctraps.ranking;
 
-import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -28,6 +27,9 @@ public class RankingManager {
 
     public static boolean setRank(String player, int number, Ranking plugin) {
         try {
+            if(number < 0) {
+                number = 0;
+            }
             plugin.statement.executeUpdate("UPDATE " + plugin.rTable + " SET rank='" + number + "' WHERE player='" + player + "'");
         } catch (SQLException e) {
             e.printStackTrace();
