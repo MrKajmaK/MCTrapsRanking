@@ -1,0 +1,6 @@
+name: MCTraps Ranking
+version: ${project.version}
+main: eu.mctraps.ranking.Ranking
+authors: [KajmaczeK]
+description: Ranking
+website: https://mctraps.eu
