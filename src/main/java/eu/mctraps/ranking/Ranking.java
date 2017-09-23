@@ -7,10 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public final class Ranking extends JavaPlugin {
     FileConfiguration config;
@@ -46,6 +43,17 @@ public final class Ranking extends JavaPlugin {
                 try {
                     openConnection();
                     statement = connection.createStatement();
+
+                    ResultSet ranking = statement.executeQuery("SHOW TABLES LIKE '" + rTable + "'");
+                    int count = 0;
+                    while(ranking.next()) {
+                        count++;
+                    }
+
+                    if(count == 0) {
+                        statement.executeUpdate("CREATE TABLE ranking (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, player VARCHAR(50) NOT NULL, kills INT DEFAULT 0 NOT NULL, deaths INT NOT NULL DEFAULT 0 NOT NULL, rank INT DEFAULT 1000 NOT NULL)");
+                        getLogger().info("Created table '" + rTable + "'");
+                    }
                 } catch(SQLException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
