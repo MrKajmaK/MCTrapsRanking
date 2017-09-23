@@ -1,4 +1,4 @@
-name: MCTraps Ranking
+name: MCTrapsRanking
 version: ${project.version}
 main: eu.mctraps.ranking.Ranking
 authors: [KajmaczeK]
