@@ -90,6 +90,16 @@ public class RankingManager {
         return -1;
     }
 
+    public static boolean createProfile(String player, Ranking plugin) {
+        try {
+            plugin.statement.executeUpdate("INSERT INTO " + plugin.rTable + " (player) VALUES ('" + player + "')");
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean exists(String player, Ranking plugin) {
         try {
             ResultSet r = plugin.statement.executeQuery("SELECT COUNT(*) FROM " + plugin.rTable + " WHERE player='" + player + "'");
