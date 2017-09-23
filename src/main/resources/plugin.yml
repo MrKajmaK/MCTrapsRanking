@@ -4,3 +4,7 @@ main: eu.mctraps.ranking.Ranking
 authors: [KajmaczeK]
 description: Ranking
 website: https://mctraps.eu
+commands:
+  ranking:
+    description: ranking
+    usage: /ranking

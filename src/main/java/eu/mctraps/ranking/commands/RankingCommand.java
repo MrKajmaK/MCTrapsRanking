@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class RankingCommand implements CommandExecutor {
-    Ranking plugin;
+    private Ranking plugin;
 
     public RankingCommand(Ranking plugin) {
         this.plugin = plugin;
@@ -25,7 +25,10 @@ public class RankingCommand implements CommandExecutor {
                 int kills = RankingManager.getKills(name, plugin);
                 int deaths = RankingManager.getDeaths(name, plugin);
                 int rank = RankingManager.getRank(name, plugin);
-                float kd = kills / deaths;
+                float kd = 0;
+                if(kills > 0 && deaths > 0) {
+                    kd = kills / deaths;
+                }
 
                 sender.sendMessage("§8§m--------§8§l« §9§lTWOJE STATYSTYKI §8§l»§8§m--------");
                 sender.sendMessage("§8● §7Ranking §8§l» §6" + rank);
