@@ -1,7 +1,9 @@
 package eu.mctraps.ranking;
 
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 public class RankingManager {
     public static boolean setDeaths(String player, int number, Ranking plugin) {
@@ -73,6 +75,19 @@ public class RankingManager {
         return -1;
     }
 
+    public static int getPosition(String player, Ranking plugin) {
+        try {
+            ResultSet r = plugin.statement.executeQuery("SELECT position FROM (SELECT id, value, @rownum := @rownum + 1 AS position FROM Stats3_death JOIN (SELECT @rownum := 0) r ORDER BY value DESC, uuid ASC) x WHERE id = 22;");
+            if(r.next()) {
+                return r.getInt("position");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
+    }
+
     public static boolean exists(String player, Ranking plugin) {
         try {
             ResultSet r = plugin.statement.executeQuery("SELECT COUNT(*) FROM " + plugin.rTable + " WHERE player='" + player + "'");
@@ -89,6 +104,22 @@ public class RankingManager {
         } catch(SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static HashMap<String, Integer> top(Ranking plugin) {
+        HashMap<String, Integer> top = new HashMap<>();
+        try {
+            ResultSet r = plugin.statement.executeQuery("SELECT * FROM " + plugin.rTable + " LIMIT 10");
+            while(r.next()) {
+                String name = r.getString("player");
+                int rank = r.getInt("rank");
+                top.put(name, rank);
+            }
+            return top;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -7,6 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+
 public class RankingCommand implements CommandExecutor {
     Ranking plugin;
 
@@ -36,7 +38,26 @@ public class RankingCommand implements CommandExecutor {
             }
         } else {
             if(args[0].equalsIgnoreCase("top")) {
-                // ToDo: top
+                HashMap<String, Integer> top = RankingManager.top(plugin);
+
+                int i = 1;
+
+                sender.sendMessage("§8§m--------§8§l« §9§lTOP 10 GRACZY §8§l»§8§m--------");
+                for (HashMap.Entry<String, Integer> entry : top.entrySet()) {
+                    if(entry.getKey().equalsIgnoreCase(sender.getName())) {
+                        sender.sendMessage("§8" + i + ". §7§l" + entry.getKey() + " §8(§6" + entry.getValue() + "§8)");
+                    } else {
+                        sender.sendMessage("§8" + i + ". §7" + entry.getKey() + " §8(§6" + entry.getValue() + "§8)");
+                    }
+                    i++;
+                }
+                sender.sendMessage("§8§m-----------------------------------------");
+                if(top.containsKey(sender.getName()) && (sender instanceof Player)) {
+                    int position = RankingManager.getPosition(sender.getName(), plugin);
+                    int rank = RankingManager.getRank(sender.getName(), plugin);
+
+                    sender.sendMessage("§8" + position + ". §7" + sender.getName() + " §8(§6" + rank + "§8)");
+                }
             } else {
                 if(RankingManager.exists(args[0], plugin)) {
                     String name = args[0];
@@ -52,7 +73,7 @@ public class RankingCommand implements CommandExecutor {
                     sender.sendMessage("§8● §7K/D §8§l» §6" + kd);
                     sender.sendMessage("§8§m-----------------------------------------");
                 } else {
-                    sender.sendMessage("§cBlad: §4taki gracz nie istnieje");
+                    sender.sendMessage("§cBlad: §4Taki gracz nie istnieje");
                 }
             }
         }
