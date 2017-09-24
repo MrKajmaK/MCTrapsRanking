@@ -6,3 +6,17 @@ database:
   password: password
 tables:
   ranking: ranking
+percentages:
+  killerMin: 5
+  killerMax: 10
+
+  negMin: 5
+  negMax: 15
+  negChance: 50
+
+  loseMin: 15
+  loseMax: 30
+
+  negLoseMin: 5
+  negLoseMax: 25
+  negLoseChance: 20

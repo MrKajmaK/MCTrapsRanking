@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.sql.*;
 
 public final class Ranking extends JavaPlugin {
-    FileConfiguration config;
+    public FileConfiguration config;
 
     public String rTable;
 

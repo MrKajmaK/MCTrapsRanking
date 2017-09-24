@@ -25,9 +25,9 @@ public class RankingCommand implements CommandExecutor {
                 int kills = RankingManager.getKills(name, plugin);
                 int deaths = RankingManager.getDeaths(name, plugin);
                 int rank = RankingManager.getRank(name, plugin);
-                float kd = 0;
+                float kd = kills;
                 if(kills > 0 && deaths > 0) {
-                    kd = kills / deaths;
+                    kd = (float)kills / (float)deaths;
                 }
 
                 sender.sendMessage("§8§m--------§8§l« §9§lTWOJE STATYSTYKI §8§l»§8§m--------");
@@ -55,19 +55,25 @@ public class RankingCommand implements CommandExecutor {
                     i++;
                 }
                 sender.sendMessage("§8§m-----------------------------------------");
-                if(top.containsKey(sender.getName()) && (sender instanceof Player)) {
+                if((!top.containsKey(sender.getName())) && (sender instanceof Player)) {
                     int position = RankingManager.getPosition(sender.getName(), plugin);
                     int rank = RankingManager.getRank(sender.getName(), plugin);
 
                     sender.sendMessage("§8" + position + ". §7" + sender.getName() + " §8(§6" + rank + "§8)");
                 }
+            } else if(args[0].equalsIgnoreCase("rl")) {
+                plugin.reloadConfig();
+                sender.sendMessage("§2Przeladowano config");
             } else {
                 if(RankingManager.exists(args[0], plugin)) {
                     String name = args[0];
                     int kills = RankingManager.getKills(name, plugin);
                     int deaths = RankingManager.getDeaths(name, plugin);
                     int rank = RankingManager.getRank(name, plugin);
-                    float kd = kills / deaths;
+                    float kd = kills;
+                    if(kills > 0 && deaths > 0) {
+                        kd = (float)kills / (float)deaths;
+                    }
 
                     sender.sendMessage("§8§m--------§8§l« §9§lSTATYSTYKI§9: §7" + name + " §8§l»§8§m--------");
                     sender.sendMessage("§8● §7Ranking §8§l» §6" + rank);
@@ -76,10 +82,10 @@ public class RankingCommand implements CommandExecutor {
                     sender.sendMessage("§8● §7K/D §8§l» §6" + kd);
                     sender.sendMessage("§8§m-----------------------------------------");
                 } else {
-                    sender.sendMessage("§cBlad: §4Taki gracz nie istnieje");
+                    sender.sendMessage("§4Blad: §cTaki gracz nie istnieje");
                 }
             }
         }
-        return false;
+        return true;
     }
 }
