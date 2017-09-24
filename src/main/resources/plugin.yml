@@ -3,6 +3,7 @@ version: ${project.version}
 main: eu.mctraps.ranking.Ranking
 authors: [KajmaczeK]
 description: Ranking
+loadBefore: Notorious
 website: https://mctraps.eu
 commands:
   ranking:

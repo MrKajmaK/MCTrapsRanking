@@ -1,5 +1,6 @@
 package eu.mctraps.ranking.listeners;
 
+import eu.mctraps.MCTrapsDisplayer.DisplayerAPI;
 import eu.mctraps.ranking.Ranking;
 import eu.mctraps.ranking.RankingManager;
 import org.bukkit.event.EventHandler;
@@ -8,6 +9,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static eu.mctraps.ranking.Ranking.round;
 
 public class PlayerDeathListener implements Listener {
     Ranking plugin;
@@ -52,13 +55,7 @@ public class PlayerDeathListener implements Listener {
             Random rand = new Random();
 
             if(killer_rank <= victim_rank) {
-//                killer_set = ((victim_rank - killer_rank) * (ThreadLocalRandom.current().nextDouble(killerMin, killerMax) / 100));
-                killer_set = (victim_rank - killer_rank) * (ThreadLocalRandom.current().nextDouble(killerMin, killerMax + 1) / 100);
-//                killer_set = killer_rank;
-                plugin.getServer().getPlayer("KajmaczeK").sendMessage("killerMax: " + killerMax);
-                plugin.getServer().getPlayer("KajmaczeK").sendMessage("killerMin: " + killerMin);
-                plugin.getServer().getPlayer("KajmaczeK").sendMessage("calc: " + ThreadLocalRandom.current().nextDouble(killerMin, killerMax));
-                plugin.getServer().getPlayer("KajmaczeK").sendMessage("killer_set: " + killer_set);
+                killer_set = victim_rank * (ThreadLocalRandom.current().nextDouble(killerMin, killerMax + 1) / 100);
             } else if(killer_rank > victim_rank) {
                 killer_set = ThreadLocalRandom.current().nextDouble(negMin, negMax + 1);
 
@@ -71,29 +68,26 @@ public class PlayerDeathListener implements Listener {
                 victim_set = (killer_set * (ThreadLocalRandom.current().nextDouble(loseMin, loseMax + 1) / 100));
             }
 
-            plugin.getServer().getPlayer("KajmaczeK").sendMessage("victim_set: " + victim_set);
-            plugin.getServer().getPlayer("KajmaczeK").sendMessage("killer_set: " + killer_set);
-            plugin.getServer().getPlayer("KajmaczeK").sendMessage("victim_rank: " + victim_rank);
-            plugin.getServer().getPlayer("KajmaczeK").sendMessage("killer_rank: " + killer_rank);
+            if(killer_set > 30) {
+                killer_set = 30;
+            }
 
-//            if(killer_rank < victim_rank) {
-//                victim_set =
-//            }
-
-//            killer_set = (int)(victim_rank * plugin.config.getDouble("percentage"));
-//            if(killer_set < 0) {
-//                killer_set = -killer_set;
-//            }
-
-//            if(killer_rank > 1000 && killer_set > 32) {
-//                killer_set = 32;
-//            }
+            killer_set = round(killer_set, 1);
+            victim_set = round(victim_set, 1);
 
             RankingManager.setRank(name, victim_rank - victim_set, plugin);
             RankingManager.setRank(killer, killer_rank + killer_set, plugin);
             
             e.setDeathMessage("");
-            plugin.getServer().broadcastMessage("§cGracz: §7" + name + " §8(§c§l-§7" + victim_set + "§8) §czostal zabity przez: §7" + killer + " §8(§a+§7" + killer_set + "§8)");
+            if(killer_set > 0) {
+                plugin.getServer().broadcastMessage("§cGracz: §7" + name + " §8(§c§l-§7" + victim_set + "§8) §czostal zabity przez: §7" + killer + " §8(§a+§7" + killer_set + "§8)");
+                DisplayerAPI.Title(e.getEntity().getKiller(), "&6Zabiles gracza: &7" + name, "&a+&7" + killer_set);
+            } else {
+                plugin.getServer().broadcastMessage("§cGracz: §7" + name + " §8(§a+§7" + victim_set + "§8) §czostal zabity przez: §7" + killer + " §8(§c§l-§7" + (-killer_set) + "§8)");
+                DisplayerAPI.Title(e.getEntity().getKiller(), "&6Zabiles gracza: &7" + name, "&c&l-&7" + (-killer_set));
+
+            }
+
         }
     }
 }

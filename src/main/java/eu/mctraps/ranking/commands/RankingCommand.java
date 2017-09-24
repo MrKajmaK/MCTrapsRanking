@@ -54,7 +54,7 @@ public class RankingCommand implements CommandExecutor {
                     }
                     i++;
                 }
-                sender.sendMessage("§8§m-----------------------------------------");
+                sender.sendMessage("§8§m-------------------------");
                 if((!top.containsKey(sender.getName())) && (sender instanceof Player)) {
                     int position = RankingManager.getPosition(sender.getName(), plugin);
                     int rank = RankingManager.getRank(sender.getName(), plugin);
