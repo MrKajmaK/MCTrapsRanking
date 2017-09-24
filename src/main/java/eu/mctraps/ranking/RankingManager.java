@@ -25,7 +25,7 @@ public class RankingManager {
         return true;
     }
 
-    public static boolean setRank(String player, int number, Ranking plugin) {
+    public static boolean setRank(String player, double number, Ranking plugin) {
         try {
             if(number < 0) {
                 number = 0;

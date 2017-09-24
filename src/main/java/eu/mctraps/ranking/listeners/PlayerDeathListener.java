@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerDeathListener implements Listener {
     Ranking plugin;
@@ -46,18 +47,20 @@ public class PlayerDeathListener implements Listener {
 
             int victim_rank = RankingManager.getRank(name, plugin);
             int killer_rank = RankingManager.getRank(killer, plugin);
-            int killer_set = 0;
-            int victim_set = 0;
+            double killer_set = 0;
+            double victim_set = 0;
             Random rand = new Random();
 
             if(killer_rank <= victim_rank) {
-                killer_set = ((victim_rank - killer_rank) * (rand.nextInt(((killerMax - killerMin) + 1) + killerMin) / 100));
+//                killer_set = ((victim_rank - killer_rank) * (ThreadLocalRandom.current().nextDouble(killerMin, killerMax) / 100));
+                killer_set = (victim_rank - killer_rank) * (ThreadLocalRandom.current().nextDouble(killerMin, killerMax + 1) / 100);
 //                killer_set = killer_rank;
                 plugin.getServer().getPlayer("KajmaczeK").sendMessage("killerMax: " + killerMax);
                 plugin.getServer().getPlayer("KajmaczeK").sendMessage("killerMin: " + killerMin);
-                plugin.getServer().getPlayer("KajmaczeK").sendMessage("calc: " + (rand.nextInt(((killerMax - killerMin) + 1) + killerMin) / 100));
+                plugin.getServer().getPlayer("KajmaczeK").sendMessage("calc: " + ThreadLocalRandom.current().nextDouble(killerMin, killerMax));
+                plugin.getServer().getPlayer("KajmaczeK").sendMessage("killer_set: " + killer_set);
             } else if(killer_rank > victim_rank) {
-                killer_set = rand.nextInt(((negMax - negMin) + 1) + negMin);
+                killer_set = ThreadLocalRandom.current().nextDouble(negMin, negMax + 1);
 
                 if(rand.nextInt(100) < negChance) {
                     killer_set = -killer_set;
@@ -65,7 +68,7 @@ public class PlayerDeathListener implements Listener {
             }
 
             if(killer_set > 0) {
-                victim_set = (killer_set * rand.nextInt(((loseMax - loseMin) + 1) + loseMin));
+                victim_set = (killer_set * (ThreadLocalRandom.current().nextDouble(loseMin, loseMax + 1) / 100));
             }
 
             plugin.getServer().getPlayer("KajmaczeK").sendMessage("victim_set: " + victim_set);
