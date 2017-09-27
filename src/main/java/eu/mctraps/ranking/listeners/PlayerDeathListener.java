@@ -4,12 +4,14 @@ import eu.mctraps.MCTrapsDisplayer.DisplayerAPI;
 import eu.mctraps.ranking.Ranking;
 import eu.mctraps.ranking.RankingManager;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static eu.mctraps.ranking.Ranking.colorify;
 import static eu.mctraps.ranking.Ranking.round;
 
 public class PlayerDeathListener implements Listener {
@@ -77,15 +79,21 @@ public class PlayerDeathListener implements Listener {
 
             RankingManager.setRank(name, victim_rank - victim_set, plugin);
             RankingManager.setRank(killer, killer_rank + killer_set, plugin);
-            
-            e.setDeathMessage("");
-            if(killer_set > 0) {
-                plugin.getServer().broadcastMessage("§cGracz: §7" + name + " §8(§c§l-§7" + victim_set + "§8) §czostal zabity przez: §7" + killer + " §8(§a+§7" + killer_set + "§8)");
-                DisplayerAPI.Title(e.getEntity().getKiller(), "&6Zabiles gracza: &7" + name, "&a+&7" + killer_set);
-            } else {
-                plugin.getServer().broadcastMessage("§cGracz: §7" + name + " §8(§a+§7" + victim_set + "§8) §czostal zabity przez: §7" + killer + " §8(§c§l-§7" + (-killer_set) + "§8)");
-                DisplayerAPI.Title(e.getEntity().getKiller(), "&6Zabiles gracza: &7" + name, "&c&l-&7" + (-killer_set));
 
+            plugin.rankingTop = RankingManager.top(plugin);
+
+            e.setDeathMessage("");
+            String title = plugin.config.getString("messages.onKill.title").replaceAll("%name%", name);
+            String titleplus = plugin.config.getString("messages.onKill.subtitle.plus").replaceAll("%points%", String.valueOf(killer_set));
+            String titleminus = plugin.config.getString("messages.onKill.subtitle.minus").replaceAll("%points%", String.valueOf(-killer_set));
+            String chatplus = colorify(plugin.config.getString("messages.onKill.chat.plus").replaceAll("%killed%", name).replaceAll("%killed_points%", String.valueOf(victim_set)).replaceAll("%killer%", killer).replaceAll("%killer_points%", String.valueOf(killer_set)));
+            String chatminus = colorify(plugin.config.getString("messages.onKill.chat.plus").replaceAll("%killed%", name).replaceAll("%killed_points%", String.valueOf(victim_set)).replaceAll("%killer%", killer).replaceAll("%killer_points%", String.valueOf(-killer_set)));
+            if(killer_set > 0) {
+                plugin.getServer().broadcastMessage(chatplus);
+                plugin.displayer.Title(e.getEntity().getKiller(), title, titleplus);
+            } else {
+                plugin.getServer().broadcastMessage(chatminus);
+                plugin.displayer.Title(e.getEntity().getKiller(), title, titleminus);
             }
 
         }

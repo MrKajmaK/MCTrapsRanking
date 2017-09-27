@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class RankingCommand implements CommandExecutor {
     private Ranking plugin;
@@ -41,12 +43,12 @@ public class RankingCommand implements CommandExecutor {
             }
         } else {
             if(args[0].equalsIgnoreCase("top")) {
-                HashMap<String, Integer> top = RankingManager.top(plugin);
+                LinkedHashMap<String, Integer> top = RankingManager.top(plugin);
 
                 int i = 1;
 
-                sender.sendMessage("§8§m--------§8§l« §9§lTOP 10 GRACZY §8§l»§8§m--------");
-                for (HashMap.Entry<String, Integer> entry : top.entrySet()) {
+                sender.sendMessage("§8§m--------§8§l« §9§lTOP " + plugin.config.getInt("top") + " GRACZY §8§l»§8§m--------");
+                for (Map.Entry<String, Integer> entry : top.entrySet()) {
                     if(entry.getKey().equalsIgnoreCase(sender.getName())) {
                         sender.sendMessage("§8" + i + ". §7§l" + entry.getKey() + " §8(§6" + entry.getValue() + "§8)");
                     } else {

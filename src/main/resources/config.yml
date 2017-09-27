@@ -20,3 +20,13 @@ percentages:
   negLoseMin: 5
   negLoseMax: 25
   negLoseChance: 20
+top: 10
+messages:
+  onKill:
+    title: "&6Zabiles gracza: &7%name%"
+    subtitle:
+      plus: "&a+&7%points%"
+      minus: "&c&l-&7%points%"
+    chat:
+      plus: "&cGracz: &7%killed% &8(&c&l-&7%killed_points%&8) &czostal zabity przez: &7%killer% &8(&a+&7%killer_points%&8)"
+      minus: "&cGracz: &7%killed% &8(&a+&7%killed_points%&8) &czostal zabity przez: &7%killer% &8(&c&l-&7%killer_points%&8)"

@@ -2,7 +2,7 @@ package eu.mctraps.ranking;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class RankingManager {
     public static boolean setDeaths(String player, int number, Ranking plugin) {
@@ -79,7 +79,7 @@ public class RankingManager {
 
     public static int getPosition(String player, Ranking plugin) {
         try {
-            ResultSet r = plugin.statement.executeQuery("SELECT position FROM (SELECT id, value, @rownum := @rownum + 1 AS position FROM Stats3_death JOIN (SELECT @rownum := 0) r ORDER BY value DESC, uuid ASC) x WHERE id = 22;");
+            ResultSet r = plugin.statement.executeQuery("SELECT position FROM (SELECT player, rank, @rownum := @rownum + 1 AS position FROM " + plugin.rTable + " JOIN (SELECT @rownum := 0) r ORDER BY rank DESC) x WHERE player = '" + player + "'");
             if(r.next()) {
                 return r.getInt("position");
             }
@@ -119,10 +119,11 @@ public class RankingManager {
         }
     }
 
-    public static HashMap<String, Integer> top(Ranking plugin) {
-        HashMap<String, Integer> top = new HashMap<>();
+    public static LinkedHashMap<String, Integer> top(Ranking plugin) {
+        LinkedHashMap<String, Integer> top = new LinkedHashMap<>();
         try {
-            ResultSet r = plugin.statement.executeQuery("SELECT * FROM " + plugin.rTable + " LIMIT 10");
+            int limit = plugin.config.getInt("top");
+            ResultSet r = plugin.statement.executeQuery("SELECT * FROM " + plugin.rTable + " ORDER BY rank DESC LIMIT " + limit);
             while(r.next()) {
                 String name = r.getString("player");
                 int rank = r.getInt("rank");

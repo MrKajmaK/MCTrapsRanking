@@ -4,6 +4,7 @@ main: eu.mctraps.ranking.Ranking
 authors: [KajmaczeK]
 description: Ranking
 depends: [MCTrapsDisplayer]
+softdepend: [PlaceholderAPI]
 website: https://mctraps.eu
 commands:
   ranking:
