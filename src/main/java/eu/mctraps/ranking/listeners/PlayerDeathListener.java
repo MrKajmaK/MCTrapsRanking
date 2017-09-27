@@ -87,7 +87,7 @@ public class PlayerDeathListener implements Listener {
             String titleplus = plugin.config.getString("messages.onKill.subtitle.plus").replaceAll("%points%", String.valueOf(killer_set));
             String titleminus = plugin.config.getString("messages.onKill.subtitle.minus").replaceAll("%points%", String.valueOf(-killer_set));
             String chatplus = colorify(plugin.config.getString("messages.onKill.chat.plus").replaceAll("%killed%", name).replaceAll("%killed_points%", String.valueOf(victim_set)).replaceAll("%killer%", killer).replaceAll("%killer_points%", String.valueOf(killer_set)));
-            String chatminus = colorify(plugin.config.getString("messages.onKill.chat.plus").replaceAll("%killed%", name).replaceAll("%killed_points%", String.valueOf(victim_set)).replaceAll("%killer%", killer).replaceAll("%killer_points%", String.valueOf(-killer_set)));
+            String chatminus = colorify(plugin.config.getString("messages.onKill.chat.minus").replaceAll("%killed%", name).replaceAll("%killed_points%", String.valueOf(victim_set)).replaceAll("%killer%", killer).replaceAll("%killer_points%", String.valueOf(-killer_set)));
             if(killer_set > 0) {
                 plugin.getServer().broadcastMessage(chatplus);
                 plugin.displayer.Title(e.getEntity().getKiller(), title, titleplus);
