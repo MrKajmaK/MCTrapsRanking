@@ -24,6 +24,13 @@ public class Placeholders extends EZPlaceholderHook {
                     return "";
                 }
             }
+            if(id.equalsIgnoreCase("rank" + i)) {
+                if(new ArrayList<>(plugin.rankingTop.keySet()).size() >= i) {
+                    return String.valueOf(new ArrayList<>(plugin.rankingTop.values()).get(i - 1));
+                } else {
+                    return "";
+                }
+            }
         }
 
         return null;
